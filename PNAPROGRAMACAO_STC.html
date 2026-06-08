@@ -1,0 +1,281 @@
+﻿<!doctype html>
+<html lang='pt-BR'>
+<head>
+<meta charset='utf-8'/>
+<meta name='viewport' content='width=device-width,initial-scale=1'/>
+<title>PROGRAMACAO_STC</title>
+<style>
+body{font-family:Inter,Arial;background:#f4f6f8;margin:0;color:#111;font-size:15px}
+.app{max-width:1100px;margin:auto;padding:14px}
+header.appbar{background:#0b8457;color:#fff;padding:14px;border-radius:10px;display:flex;gap:10px;align-items:center}
+.title{font-size:18px;font-weight:700}
+.controls{display:flex;gap:10px;flex-wrap:wrap;margin:14px 0}
+.controls select,.controls input{padding:10px 12px;border-radius:12px;border:1px solid #ccc;font-size:15px;background:#fff}
+.cardsWrap{display:grid;grid-template-columns:1fr;gap:16px;padding:10px 0}
+.card{background:#fff;border-radius:14px;padding:16px;box-shadow:0 3px 10px rgba(0,0,0,.1);display:flex;flex-direction:column;gap:12px;font-size:15px;border-left:6px solid #d9d9d9}
+.card.prio-01{border-left-color:#d62828}
+.card.prio-02{border-left-color:#f77f00}
+.card.prio-03{border-left-color:#2a9d8f}
+.topline{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;flex-wrap:wrap}
+.nota{font-size:20px;font-weight:800;color:#0b8457}
+.sub{font-size:13px;color:#555}
+.addr{font-size:14px;color:#333;line-height:1.45}
+.fields{display:flex;gap:8px;flex-wrap:wrap}
+.pill{background:#eef3f2;padding:7px 10px;border-radius:12px;font-size:13px}
+.pill.priority{font-weight:800;color:#fff}
+.pill.prio-01{background:#d62828}
+.pill.prio-02{background:#f77f00}
+.pill.prio-03{background:#2a9d8f}
+.count{padding:10px 12px;background:#fff;border-radius:12px;border:1px solid #ccc}
+.empty{display:none;text-align:center;color:#888;padding:20px}
+</style>
+</head>
+<body>
+<div class='app'>
+<header class='appbar'>
+<div>
+<div class='title'>PROGRAMACAO_STC</div>
+<div style='font-size:12px'>Última atualização: 08/06/2026 16:42:29</div>
+</div>
+</header>
+<div class='controls'>
+<select id='filtroPrioridade'><option value=''>Todas as prioridades</option></select>
+<select id='filtroEquipe'><option value=''>Todas as equipes</option></select>
+<input id='qSearch' type='search' placeholder='Pesquisar: equipe, nota, local, bairro, rua, medidor...' />
+<div class='count' id='contadorTotal'>Total: 0</div>
+</div>
+<div id='cards' class='cardsWrap'></div>
+<div id='empty' class='empty'>Nenhum registro encontrado.</div>
+<div style='display:none'><table id='tblNotas'><tbody>
+<tr data-equipe='STCPNA0001' data-tensao='11' data-nota='1005591730' data-concl='02/06/2026' data-txtcode='Suspens Falta Pgto Dunning – PROPRIO' data-local='PARNAMIRIM' data-bairro='BELA PARNAMIRIM' data-rua='RUA MANOEL BATISTA 15' data-dtpedido='CSR_OPT_100-@SOLO@-@' data-medidor='2160327670' data-valor='275' data-prioridade='PRIO-03'></tr>
+<tr data-equipe='STCPNA0001' data-tensao='11' data-nota='1005595135' data-concl='02/06/2026' data-txtcode='Suspens Falta Pgto Dunning – PROPRIO' data-local='MACAIBA' data-bairro='GUARAPES' data-rua='RUA SAO JOSE 30' data-dtpedido='CSR_OPT_100-@SOLO@-@' data-medidor='2141086157' data-valor='1554' data-prioridade='PRIO-01-NÃO ACEITAR NEGOCIAÇÃO'></tr>
+<tr data-equipe='STCPNA0001' data-tensao='11' data-nota='1005595146' data-concl='02/06/2026' data-txtcode='Suspens Falta Pgto Dunning – PROPRIO' data-local='MACAIBA' data-bairro='CENTRO' data-rua='RUA JOSE NO DA SILVA 11' data-dtpedido='CSR_OPT_100-@SOLO@-@' data-medidor='2212664645' data-valor='350' data-prioridade='PRIO-03'></tr>
+<tr data-equipe='STCPNA0001' data-tensao='11' data-nota='1005592289' data-concl='02/06/2026' data-txtcode='Suspens Falta Pgto Dunning – PROPRIO' data-local='MACAIBA' data-bairro='CENTRO' data-rua='RUA SAO SEBASTIAO 40' data-dtpedido='CSR_OPT_100-@SOLO@-@' data-medidor='2240319805' data-valor='296' data-prioridade='PRIO-03'></tr>
+<tr data-equipe='STCPNA0001' data-tensao='11' data-nota='1005594682' data-concl='02/06/2026' data-txtcode='Suspens Falta Pgto Dunning – PROPRIO' data-local='MACAIBA' data-bairro='BOA ESPERANCA' data-rua='RUA SERGIPE 91' data-dtpedido='CSR_OPT_100-@SOLO@-@' data-medidor='2213129123' data-valor='349' data-prioridade='PRIO-03'></tr>
+<tr data-equipe='STCPNA0001' data-tensao='11' data-nota='1005594206' data-concl='02/06/2026' data-txtcode='Suspens Falta Pgto Dunning – PROPRIO' data-local='MACAIBA' data-bairro='MANGABEIRA' data-rua='RUA ARTUR ARAUJO 357' data-dtpedido='CSR_OPT_100-@SOLO@-@' data-medidor='2190506358' data-valor='1596' data-prioridade='PRIO-01'></tr>
+<tr data-equipe='STCPNA0001' data-tensao='11' data-nota='1005591229' data-concl='02/06/2026' data-txtcode='Suspens Falta Pgto Dunning – PROPRIO' data-local='MACAIBA' data-bairro='CARACAXA' data-rua='RUA BOA ESPERANCA 21' data-dtpedido='CSR_OPT_100-@SOLO@-@' data-medidor='2180126859' data-valor='1877' data-prioridade='PRIO-01'></tr>
+<tr data-equipe='STCPNA0001' data-tensao='11' data-nota='1005590750' data-concl='02/06/2026' data-txtcode='Suspens Falta Pgto Dunning – PROPRIO' data-local='MACAIBA' data-bairro='CENTRO' data-rua='RUA ELEM MACIEL 4' data-dtpedido='CSR_OPT_100-@SOLO@-@' data-medidor='2210310552' data-valor='277' data-prioridade='PRIO-03'></tr>
+<tr data-equipe='STCPNA0001' data-tensao='11' data-nota='1005591287' data-concl='02/06/2026' data-txtcode='Suspens Falta Pgto Dunning – PROPRIO' data-local='MACAIBA' data-bairro='CENTRO' data-rua='RUA ALFREDO MESQUITA 320' data-dtpedido='CSR_OPT_100-@SOLO@-@' data-medidor='2211689768' data-valor='348' data-prioridade='PRIO-03'></tr>
+<tr data-equipe='STCPNA0001' data-tensao='11' data-nota='1005593731' data-concl='02/06/2026' data-txtcode='Suspens Falta Pgto Dunning – PROPRIO' data-local='MONTE ALEGRE' data-bairro='VALE DO PATURI' data-rua='SI VALE DO PATURI 42' data-dtpedido='CSR_OPT_100-@SOLO@-@' data-medidor='2230286496' data-valor='1653' data-prioridade='PRIO-01'></tr>
+<tr data-equipe='STCPNA0001' data-tensao='11' data-nota='1005593218' data-concl='02/06/2026' data-txtcode='Suspens Falta Pgto Dunning – PROPRIO' data-local='MACAIBA' data-bairro='CENTRO' data-rua='RUA SEVERINO FRANCISCO PACHECO 262' data-dtpedido='CSR_OPT_100-@SOLO@-@' data-medidor='2240241717' data-valor='331' data-prioridade='PRIO-03'></tr>
+<tr data-equipe='STCPNA0001' data-tensao='11' data-nota='1005592701' data-concl='02/06/2026' data-txtcode='Suspens Falta Pgto Dunning – PROPRIO' data-local='MACAIBA' data-bairro='CENTRO' data-rua='RUA VINTE E TRES DE JUNHO 18' data-dtpedido='CSR_OPT_100-@SOLO@-@' data-medidor='2130677668' data-valor='845' data-prioridade='PRIO-02'></tr>
+<tr data-equipe='STCPNA0001' data-tensao='11' data-nota='1005594697' data-concl='02/06/2026' data-txtcode='Suspens Falta Pgto Dunning – PROPRIO' data-local='MACAIBA' data-bairro='CENTRO' data-rua='RUA VINTE E CINCO DE DEZEMBRO 7, SN' data-dtpedido='CSR_OPT_100-@SOLO@-@' data-medidor='2230267165' data-valor='534' data-prioridade='PRIO-02'></tr>
+<tr data-equipe='STCPNA0002' data-tensao='31' data-nota='1005593118' data-concl='02/06/2026' data-txtcode='Suspens Falta Pgto Dunning – PROPRIO' data-local='MONTE ALEGRE' data-bairro='LAGOA DO MATO' data-rua='PO LAGOA DO MATO 63' data-dtpedido='CSR_OPT_100-@POST@-@' data-medidor='2212229132' data-valor='1688' data-prioridade='PRIO-01'></tr>
+<tr data-equipe='STCPNA0002' data-tensao='31' data-nota='1005594126' data-concl='02/06/2026' data-txtcode='Suspens Falta Pgto Dunning – PROPRIO' data-local='NISIA FLORESTA' data-bairro='CIDADE HORTIGRANJEIRA' data-rua='PO CIDADE HORTIGRANJEIRA 92' data-dtpedido='CSR_OPT_100-@POST@-@' data-medidor='2150842088' data-valor='512' data-prioridade='PRIO-02'></tr>
+<tr data-equipe='STCPNA0002' data-tensao='11' data-nota='1005594669' data-concl='02/06/2026' data-txtcode='Suspens Falta Pgto Dunning – PROPRIO' data-local='NISIA FLORESTA' data-bairro='COLONIA DO PIUM' data-rua='ET COLONIA DO PIUM 71' data-dtpedido='CSR_OPT_100-@SOLO@-@' data-medidor='2220690817' data-valor='1529' data-prioridade='PRIO-01'></tr>
+<tr data-equipe='STCPNA0002' data-tensao='11' data-nota='1005590346' data-concl='02/06/2026' data-txtcode='Suspens Falta Pgto Dunning – PROPRIO' data-local='PARNAMIRIM' data-bairro='MONTE CASTELO' data-rua='RUA DOUTOR CARLOS MATEUS 144, E' data-dtpedido='CSR_OPT_100-@SOLO@-@' data-medidor='2221983753' data-valor='1045' data-prioridade='PRIO-01'></tr>
+<tr data-equipe='STCPNA0002' data-tensao='31' data-nota='1005592692' data-concl='02/06/2026' data-txtcode='Suspens Falta Pgto Dunning – PROPRIO' data-local='PARNAMIRIM' data-bairro='PARQUE DE EXPOSICOES' data-rua='AV PILOTO PEREIRA TIM 160, 1' data-dtpedido='CSR_OPT_100-@POST@-@' data-medidor='2170214890' data-valor='342' data-prioridade='PRIO-03'></tr>
+<tr data-equipe='STCPNA0002' data-tensao='11' data-nota='1005591345' data-concl='02/06/2026' data-txtcode='Suspens Falta Pgto Dunning – PROPRIO' data-local='PARNAMIRIM' data-bairro='EMAUS' data-rua='RUA SEBASTIAO COELHO 68' data-dtpedido='CSR_OPT_100-@SOLO@-@' data-medidor='2221576600' data-valor='1212' data-prioridade='PRIO-01'></tr>
+<tr data-equipe='STCPNA0002' data-tensao='11' data-nota='1005591364' data-concl='02/06/2026' data-txtcode='Suspens Falta Pgto Dunning – PROPRIO' data-local='PARNAMIRIM' data-bairro='CENTRO' data-rua='AV BRIGADEIRO EVERALDO BREVES 273' data-dtpedido='CSR_OPT_100-@SOLO@-@' data-medidor='2242358395' data-valor='276' data-prioridade='PRIO-03'></tr>
+<tr data-equipe='STCPNA0002' data-tensao='31' data-nota='1005592673' data-concl='02/06/2026' data-txtcode='Suspens Falta Pgto Dunning – PROPRIO' data-local='PARNAMIRIM' data-bairro='PARQUE DAS ARVORES' data-rua='AV PARQUE DOS BOSQUES 30' data-dtpedido='CSR_OPT_100-@POST@-@' data-medidor='2212058559' data-valor='21492' data-prioridade='PRIO-01'></tr>
+<tr data-equipe='STCPNA0002' data-tensao='11' data-nota='1005593205' data-concl='02/06/2026' data-txtcode='Suspens Falta Pgto Dunning – PROPRIO' data-local='NISIA FLORESTA' data-bairro='BUZIOS' data-rua='RUA PESCANA 4, SN' data-dtpedido='CSR_OPT_100-@SOLO@-@' data-medidor='2220891065' data-valor='771' data-prioridade='PRIO-02'></tr>
+<tr data-equipe='STCPNA0002' data-tensao='31' data-nota='1005595464' data-concl='02/06/2026' data-txtcode='Suspens Falta Pgto Dunning – PROPRIO' data-local='PARNAMIRIM' data-bairro='NOVA PARNAMIRIM' data-rua='RUA POCO BRANCO 113' data-dtpedido='CSR_OPT_100-@POST@-@' data-medidor='2240771309' data-valor='1871' data-prioridade='PRIO-01'></tr>
+<tr data-equipe='STCPNA0002' data-tensao='11' data-nota='1005594098' data-concl='02/06/2026' data-txtcode='Suspens Falta Pgto Dunning – PROPRIO' data-local='NISIA FLORESTA' data-bairro='PIRANGI DO SUL' data-rua='RUA PEDRA GRANDE 200' data-dtpedido='CSR_OPT_100-@SOLO@-@' data-medidor='2140632751' data-valor='1091' data-prioridade='PRIO-01'></tr>
+<tr data-equipe='STCPNA0002' data-tensao='11' data-nota='1005593114' data-concl='02/06/2026' data-txtcode='Suspens Falta Pgto Dunning – PROPRIO' data-local='NISIA FLORESTA' data-bairro='PIRANGI DO SUL' data-rua='ET PARA ALCACUZ 101' data-dtpedido='CSR_OPT_100-@SOLO@-@' data-medidor='2170069741' data-valor='971' data-prioridade='PRIO-02'></tr>
+<tr data-equipe='STCPNA0002' data-tensao='11' data-nota='1005591689' data-concl='02/06/2026' data-txtcode='Suspens Falta Pgto Dunning – PROPRIO' data-local='NISIA FLORESTA' data-bairro='PIRANGI DO SUL' data-rua='ET NOVA PARA BUZIOS 10, A' data-dtpedido='CSR_OPT_100-@SOLO@-@' data-medidor='2242569116' data-valor='1535' data-prioridade='PRIO-01'></tr>
+<tr data-equipe='STCPNA0002' data-tensao='11' data-nota='1005591310' data-concl='02/06/2026' data-txtcode='Suspens Falta Pgto Dunning – PROPRIO' data-local='NISIA FLORESTA' data-bairro='ALCACUZ' data-rua='PO ALCACUZ 200' data-dtpedido='CSR_OPT_100-@POST@-@' data-medidor='5254487378' data-valor='405' data-prioridade='PRIO-03'></tr>
+<tr data-equipe='STCPNA0002' data-tensao='31' data-nota='1005590349' data-concl='02/06/2026' data-txtcode='Suspens Falta Pgto Dunning – PROPRIO' data-local='NISIA FLORESTA' data-bairro='BUZIOS' data-rua='AV CORONEL PAULO SALEMA 45' data-dtpedido='CSR_OPT_100-@POST@-@' data-medidor='2180009631' data-valor='1876' data-prioridade='PRIO-01'></tr>
+<tr data-equipe='STCPNA0002' data-tensao='11' data-nota='1005595108' data-concl='02/06/2026' data-txtcode='Suspens Falta Pgto Dunning – PROPRIO' data-local='NISIA FLORESTA' data-bairro='ALCACUZ' data-rua='RUA GOLANDI 3' data-dtpedido='CSR_OPT_100-@SOLO@-@' data-medidor='2170983826' data-valor='369' data-prioridade='PRIO-03'></tr>
+<tr data-equipe='STCPNA0003' data-tensao='11' data-nota='1005593135' data-concl='02/06/2026' data-txtcode='Suspens Falta Pgto Dunning – PROPRIO' data-local='NISIA FLORESTA' data-bairro='BUZIOS' data-rua='AV CORONEL PAULO SALEMA 1016' data-dtpedido='CSR_OPT_100-@SOLO@-@' data-medidor='90636146' data-valor='341' data-prioridade='PRIO-03'></tr>
+<tr data-equipe='STCPNA0003' data-tensao='11' data-nota='1005594674' data-concl='02/06/2026' data-txtcode='Suspens Falta Pgto Dunning – PROPRIO' data-local='NISIA FLORESTA' data-bairro='BUZIOS' data-rua='AV CORONEL PAULO SALEMA 106' data-dtpedido='CSR_OPT_100-@SOLO@-@' data-medidor='2160756333' data-valor='407' data-prioridade='PRIO-03'></tr>
+<tr data-equipe='STCPNA0003' data-tensao='11' data-nota='1005595091' data-concl='02/06/2026' data-txtcode='Suspens Falta Pgto Dunning – PROPRIO' data-local='NISIA FLORESTA' data-bairro='BUZIOS' data-rua='AV CORONEL PAULO SALEMA 1141' data-dtpedido='CSR_OPT_100-@SOLO@-@' data-medidor='2240860565' data-valor='500' data-prioridade='PRIO-03'></tr>
+<tr data-equipe='STCPNA0003' data-tensao='11' data-nota='1005593112' data-concl='02/06/2026' data-txtcode='Suspens Falta Pgto Dunning – PROPRIO' data-local='PARNAMIRIM' data-bairro='NOVA PARNAMIRIM' data-rua='RUA JARDIM DO SERIDO 33' data-dtpedido='CSR_OPT_100-@SOLO@-@' data-medidor='2160682623' data-valor='297' data-prioridade='PRIO-03'></tr>
+<tr data-equipe='STCPNA0003' data-tensao='11' data-nota='1005593598' data-concl='02/06/2026' data-txtcode='Suspens Falta Pgto Dunning – PROPRIO' data-local='PARNAMIRIM' data-bairro='EMAUS' data-rua='ET PARA CATRE 175' data-dtpedido='CSR_OPT_100-@SOLO@-@' data-medidor='2151074009' data-valor='1546' data-prioridade='PRIO-01'></tr>
+<tr data-equipe='STCPNA0003' data-tensao='11' data-nota='1005595502' data-concl='02/06/2026' data-txtcode='Suspens Falta Pgto Dunning – PROPRIO' data-local='PARNAMIRIM' data-bairro='MONTE CASTELO' data-rua='AV PAULO AFONSO 45' data-dtpedido='CSR_OPT_100-@SOLO@-@' data-medidor='5254468071' data-valor='660' data-prioridade='PRIO-02'></tr>
+<tr data-equipe='STCPNA0003' data-tensao='11' data-nota='1005590298' data-concl='02/06/2026' data-txtcode='Suspens Falta Pgto Dunning – PROPRIO' data-local='PARNAMIRIM' data-bairro='EMAUS' data-rua='RUA RIO NILO 265' data-dtpedido='CSR_OPT_100-@SOLO@-@' data-medidor='2213110082' data-valor='357' data-prioridade='PRIO-03'></tr>
+<tr data-equipe='STCPNA0003' data-tensao='11' data-nota='1005590871' data-concl='02/06/2026' data-txtcode='Suspens Falta Pgto Dunning – PROPRIO' data-local='PARNAMIRIM' data-bairro='EMAUS' data-rua='RUA AEROPORTO DE TEFE 201' data-dtpedido='CSR_OPT_100-@SOLO@-@' data-medidor='2210348037' data-valor='840' data-prioridade='PRIO-02'></tr>
+<tr data-equipe='STCPNA0003' data-tensao='11' data-nota='1005590887' data-concl='02/06/2026' data-txtcode='Suspens Falta Pgto Dunning – PROPRIO' data-local='NISIA FLORESTA' data-bairro='BUZIOS' data-rua='LO SOSSEGO DE BUZIOS 2, SN' data-dtpedido='CSR_OPT_100-@SOLO@-@' data-medidor='2130878582' data-valor='697' data-prioridade='PRIO-02'></tr>
+<tr data-equipe='STCPNA0003' data-tensao='11' data-nota='1005592174' data-concl='02/06/2026' data-txtcode='Suspens Falta Pgto Dunning – PROPRIO' data-local='PARNAMIRIM' data-bairro='VIDA NOVA' data-rua='RUA MAR DA GALILEIA 1080' data-dtpedido='CSR_OPT_100-@SOLO@-@' data-medidor='2170065592' data-valor='447' data-prioridade='PRIO-03'></tr>
+<tr data-equipe='STCPNA0003' data-tensao='31' data-nota='1005593158' data-concl='02/06/2026' data-txtcode='Suspens Falta Pgto Dunning – PROPRIO' data-local='NISIA FLORESTA' data-bairro='OITIZEIRO' data-rua='PO OITIZEIRO 2' data-dtpedido='CSR_OPT_100-@POST@-@' data-medidor='2181052751' data-valor='2514' data-prioridade='PRIO-01'></tr>
+<tr data-equipe='STCPNA0003' data-tensao='11' data-nota='1005594245' data-concl='02/06/2026' data-txtcode='Suspens Falta Pgto Dunning – PROPRIO' data-local='PARNAMIRIM' data-bairro='MONTE CASTELO' data-rua='RUA FELICIANO MARTINS 33' data-dtpedido='CSR_OPT_100-@SOLO@-@' data-medidor='2210794207' data-valor='382' data-prioridade='PRIO-03'></tr>
+<tr data-equipe='STCPNA0003' data-tensao='11' data-nota='1005592729' data-concl='02/06/2026' data-txtcode='Suspens Falta Pgto Dunning – PROPRIO' data-local='PARNAMIRIM' data-bairro='SANTOS REIS' data-rua='RUA ASPIRANTE SANTOS 406' data-dtpedido='CSR_OPT_100-@SOLO@-@' data-medidor='2230826644' data-valor='521' data-prioridade='PRIO-02'></tr>
+<tr data-equipe='STCPNA0003' data-tensao='11' data-nota='1005590767' data-concl='02/06/2026' data-txtcode='Suspens Falta Pgto Dunning – PROPRIO' data-local='NISIA FLORESTA' data-bairro='BARRA DE TABATINGA' data-rua='RUA DAS MARIAS 125' data-dtpedido='CSR_OPT_100-@SOLO@-@' data-medidor='2213163321' data-valor='2135' data-prioridade='PRIO-01'></tr>
+<tr data-equipe='STCPNA0003' data-tensao='11' data-nota='1005590758' data-concl='02/06/2026' data-txtcode='Suspens Falta Pgto Dunning – PROPRIO' data-local='PARNAMIRIM' data-bairro='PASSAGEM DE AREIA' data-rua='RUA MANOEL FERNANDES NETO 520' data-dtpedido='CSR_OPT_100-@SOLO@-@' data-medidor='2212975853' data-valor='295' data-prioridade='PRIO-03'></tr>
+<tr data-equipe='STCPNA0003' data-tensao='11' data-nota='1005595177' data-concl='02/06/2026' data-txtcode='Suspens Falta Pgto Dunning – PROPRIO' data-local='PARNAMIRIM' data-bairro='EMAUS' data-rua='RUA PADRE LUIS GONZAGA MONTE 686, A' data-dtpedido='CSR_OPT_100-@SOLO@-@' data-medidor='2240822477' data-valor='1948' data-prioridade='PRIO-01'></tr>
+<tr data-equipe='STCPNA0003' data-tensao='11' data-nota='1005592616' data-concl='02/06/2026' data-txtcode='Suspens Falta Pgto Dunning – PROPRIO' data-local='PARNAMIRIM' data-bairro='EMAUS' data-rua='RUA DOM BOSCO 186, A' data-dtpedido='CSR_OPT_100-@SOLO@-@' data-medidor='2221992434' data-valor='686' data-prioridade='PRIO-02'></tr>
+<tr data-equipe='STCPNA0003' data-tensao='11' data-nota='1005592624' data-concl='02/06/2026' data-txtcode='Suspens Falta Pgto Dunning – PROPRIO' data-local='PARNAMIRIM' data-bairro='CENTRO' data-rua='RUA ASPIRANTE SANTOS 170' data-dtpedido='CSR_OPT_100-@SOLO@-@' data-medidor='2211546991' data-valor='443' data-prioridade='PRIO-03'></tr>
+<tr data-equipe='STCPNA0003' data-tensao='11' data-nota='1005592286' data-concl='02/06/2026' data-txtcode='Suspens Falta Pgto Dunning – PROPRIO' data-local='PARNAMIRIM' data-bairro='NOVA PARNAMIRIM' data-rua='RUA FREJO 350' data-dtpedido='CSR_OPT_100-@SOLO@-@' data-medidor='2131403839' data-valor='272' data-prioridade='PRIO-03'></tr>
+<tr data-equipe='STCPNA0003' data-tensao='31' data-nota='1005590846' data-concl='02/06/2026' data-txtcode='Suspens Falta Pgto Dunning – PROPRIO' data-local='PARNAMIRIM' data-bairro='NOVA ESPERANCA' data-rua='RUA REGINA ALVES DE ANDRADE 49' data-dtpedido='CSR_OPT_100-@POST@-@' data-medidor='2170195569' data-valor='10264' data-prioridade='PRIO-01'></tr>
+<tr data-equipe='STCPNA0003' data-tensao='11' data-nota='1005591777' data-concl='02/06/2026' data-txtcode='Suspens Falta Pgto Dunning – PROPRIO' data-local='SAO JOSE DE MIPIBU' data-bairro='TABORDA' data-rua='PO TABORDA 64' data-dtpedido='CSR_OPT_100-@POST@-@' data-medidor='2222497194' data-valor='810' data-prioridade='PRIO-02'></tr>
+<tr data-equipe='STCPNA0003' data-tensao='31' data-nota='1005593187' data-concl='02/06/2026' data-txtcode='Suspens Falta Pgto Dunning – PROPRIO' data-local='NISIA FLORESTA' data-bairro='BOA CICA' data-rua='PO BOA CICA 3, -PR 2' data-dtpedido='CSR_OPT_100-@POST@-@' data-medidor='2222073831' data-valor='2163' data-prioridade='PRIO-01'></tr>
+<tr data-equipe='STCPNA0003' data-tensao='31' data-nota='1005594156' data-concl='02/06/2026' data-txtcode='Suspens Falta Pgto Dunning – PROPRIO' data-local='NISIA FLORESTA' data-bairro='LAGOA SECA' data-rua='PO LAGOA SECA 1, -PR 21' data-dtpedido='CSR_OPT_100-@POST@-@' data-medidor='2170899140' data-valor='1538' data-prioridade='PRIO-01'></tr>
+<tr data-equipe='STCPNA0003' data-tensao='31' data-nota='1005590888' data-concl='02/06/2026' data-txtcode='Suspens Falta Pgto Dunning – PROPRIO' data-local='NISIA FLORESTA' data-bairro='CAMPO DE SANTANA' data-rua='PO CAMPO DE SANTANA 1, -PR 2' data-dtpedido='CSR_OPT_100-@POST@-@' data-medidor='2171157750' data-valor='4796' data-prioridade='PRIO-01'></tr>
+<tr data-equipe='STCPNA0003' data-tensao='31' data-nota='1005594713' data-concl='02/06/2026' data-txtcode='Suspens Falta Pgto Dunning – PROPRIO' data-local='PARNAMIRIM' data-bairro='EMAUS' data-rua='RUA JOANA DARC 203' data-dtpedido='CSR_OPT_100-@POST@-@' data-medidor='2009080098' data-valor='342' data-prioridade='PRIO-03'></tr>
+<tr data-equipe='STCPNA0003' data-tensao='11' data-nota='1005594117' data-concl='02/06/2026' data-txtcode='Suspens Falta Pgto Dunning – PROPRIO' data-local='MACAIBA' data-bairro='PERI PERI' data-rua='SI JUNDIAI 82' data-dtpedido='CSR_OPT_100-@SOLO@-@' data-medidor='2170788616' data-valor='285' data-prioridade='PRIO-03'></tr>
+<tr data-equipe='STCPNA0003' data-tensao='11' data-nota='1005594249' data-concl='02/06/2026' data-txtcode='Suspens Falta Pgto Dunning – PROPRIO' data-local='NISIA FLORESTA' data-bairro='BUZIOS' data-rua='RUA BELA VISTA 39' data-dtpedido='CSR_OPT_100-@POST@-@' data-medidor='2240943690' data-valor='763' data-prioridade='PRIO-02'></tr>
+<tr data-equipe='STCPNA0004' data-tensao='11' data-nota='1005590805' data-concl='02/06/2026' data-txtcode='Suspens Falta Pgto Dunning – PROPRIO' data-local='PARNAMIRIM' data-bairro='NOVA ESPERANCA' data-rua='RUA PARQUE EMBU GUACU 136' data-dtpedido='CSR_OPT_100-@SOLO@-@' data-medidor='5254310230' data-valor='2241' data-prioridade='PRIO-01'></tr>
+<tr data-equipe='STCPNA0004' data-tensao='31' data-nota='1005589884' data-concl='02/06/2026' data-txtcode='Suspens Falta Pgto Dunning – PROPRIO' data-local='NISIA FLORESTA' data-bairro='ZONA RURAL' data-rua='CH DOIS IRMAOS 6' data-dtpedido='CSR_OPT_100-@POST@-@' data-medidor='2161072322' data-valor='2574' data-prioridade='PRIO-01'></tr>
+<tr data-equipe='STCPNA0004' data-tensao='11' data-nota='1005592189' data-concl='02/06/2026' data-txtcode='Suspens Falta Pgto Dunning – PROPRIO' data-local='MACAIBA' data-bairro='AUGUSTO SEVERO' data-rua='RUA ANTILIO VIANA DA COSTA 19' data-dtpedido='CSR_OPT_100-@SOLO@-@' data-medidor='2230558003' data-valor='270' data-prioridade='PRIO-03'></tr>
+<tr data-equipe='STCPNA0004' data-tensao='11' data-nota='1005590810' data-concl='02/06/2026' data-txtcode='Suspens Falta Pgto Dunning – PROPRIO' data-local='PARNAMIRIM' data-bairro='EMAUS' data-rua='RUA SAO CAETANO 97' data-dtpedido='CSR_OPT_100-@SOLO@-@' data-medidor='2170076780' data-valor='493' data-prioridade='PRIO-03'></tr>
+<tr data-equipe='STCPNA0004' data-tensao='11' data-nota='1005590898' data-concl='02/06/2026' data-txtcode='Suspens Falta Pgto Dunning – PROPRIO' data-local='PARNAMIRIM' data-bairro='EMAUS' data-rua='RUA SAO CAETANO 97' data-dtpedido='CSR_OPT_100-@SOLO@-@' data-medidor='2222352889' data-valor='272' data-prioridade='PRIO-03'></tr>
+<tr data-equipe='STCPNA0004' data-tensao='11' data-nota='1005591242' data-concl='02/06/2026' data-txtcode='Suspens Falta Pgto Dunning – PROPRIO' data-local='PARNAMIRIM' data-bairro='EMAUS' data-rua='RUA RIO LARGO 104' data-dtpedido='CSR_OPT_100-@SOLO@-@' data-medidor='70037777' data-valor='271' data-prioridade='PRIO-03'></tr>
+<tr data-equipe='STCPNA0004' data-tensao='11' data-nota='1005592676' data-concl='02/06/2026' data-txtcode='Suspens Falta Pgto Dunning – PROPRIO' data-local='MACAIBA' data-bairro='BOA ESPERANCA' data-rua='RUA ALMIR CARVALHO DO NASCIMENTO 294' data-dtpedido='CSR_OPT_100-@SOLO@-@' data-medidor='2170968410' data-valor='324' data-prioridade='PRIO-03'></tr>
+<tr data-equipe='STCPNA0004' data-tensao='11' data-nota='1005589864' data-concl='02/06/2026' data-txtcode='Suspens Falta Pgto Dunning – PROPRIO' data-local='PARNAMIRIM' data-bairro='PARQUE DE EXPOSICOES' data-rua='RUA VEREADOR BANDEIRA JUNIOR 402, --B' data-dtpedido='CSR_OPT_100-@SOLO@-@' data-medidor='2242377713' data-valor='324' data-prioridade='PRIO-03'></tr>
+<tr data-equipe='STCPNA0004' data-tensao='11' data-nota='1005593735' data-concl='02/06/2026' data-txtcode='Suspens Falta Pgto Dunning – PROPRIO' data-local='PARNAMIRIM' data-bairro='NOVA PARNAMIRIM' data-rua='RUA GOIANINHA 22, -FT' data-dtpedido='CSR_OPT_100-@SOLO@-@' data-medidor='2242406314' data-valor='297' data-prioridade='PRIO-03'></tr>
+<tr data-equipe='STCPNA0004' data-tensao='11' data-nota='1005595088' data-concl='02/06/2026' data-txtcode='Suspens Falta Pgto Dunning – PROPRIO' data-local='NISIA FLORESTA' data-bairro='BARRA DE TABATINGA' data-rua='AV CORONEL PAULO SALEMA 103' data-dtpedido='CSR_OPT_100-@SOLO@-@' data-medidor='2220155164' data-valor='472' data-prioridade='PRIO-03'></tr>
+<tr data-equipe='STCPNA0004' data-tensao='31' data-nota='1005594137' data-concl='02/06/2026' data-txtcode='Suspens Falta Pgto Dunning – PROPRIO' data-local='PARNAMIRIM' data-bairro='EMAUS' data-rua='AV AEROPORTO BRIGADEIRO EDUARDO GOMES 1' data-dtpedido='CSR_OPT_100-@POST@-@' data-medidor='2161030565' data-valor='1071' data-prioridade='PRIO-01'></tr>
+<tr data-equipe='STCPNA0004' data-tensao='11' data-nota='1005590781' data-concl='02/06/2026' data-txtcode='Suspens Falta Pgto Dunning – PROPRIO' data-local='MACAIBA' data-bairro='ZONA RURAL' data-rua='CH SEBASTIAO SIMPLICIO 11, -FT' data-dtpedido='CSR_OPT_100-@SOLO@-@' data-medidor='2240575348' data-valor='439' data-prioridade='PRIO-03'></tr>
+<tr data-equipe='STCPNA0004' data-tensao='11' data-nota='1005592194' data-concl='02/06/2026' data-txtcode='Suspens Falta Pgto Dunning – PROPRIO' data-local='SAO JOSE DE MIPIBU' data-bairro='TABORDA' data-rua='PO TABORDA 426' data-dtpedido='CSR_OPT_100-@SOLO@-@' data-medidor='2240117331' data-valor='422' data-prioridade='PRIO-03'></tr>
+<tr data-equipe='STCPNA0004' data-tensao='11' data-nota='1005590865' data-concl='02/06/2026' data-txtcode='Suspens Falta Pgto Dunning – PROPRIO' data-local='MACAIBA' data-bairro='CENTRO' data-rua='RUA SEVERINO GALDINO RIBEIRO 100, --F' data-dtpedido='CSR_OPT_100-@SOLO@-@' data-medidor='2200577798' data-valor='289' data-prioridade='PRIO-03'></tr>
+<tr data-equipe='STCPNA0004' data-tensao='11' data-nota='1005592675' data-concl='02/06/2026' data-txtcode='Suspens Falta Pgto Dunning – PROPRIO' data-local='SAO JOSE DE MIPIBU' data-bairro='TABORDA' data-rua='RUA LUCIA BARBOSA DE AZEVEDO 511' data-dtpedido='CSR_OPT_100-@POST@-@' data-medidor='2140130616' data-valor='285' data-prioridade='PRIO-03'></tr>
+<tr data-equipe='STCPNA0004' data-tensao='11' data-nota='1005595190' data-concl='02/06/2026' data-txtcode='Suspens Falta Pgto Dunning – PROPRIO' data-local='PARNAMIRIM' data-bairro='EMAUS' data-rua='RUA SANTA TERESA 500' data-dtpedido='CSR_OPT_100-@SOLO@-@' data-medidor='2240172715' data-valor='367' data-prioridade='PRIO-03'></tr>
+<tr data-equipe='STCPNA0004' data-tensao='11' data-nota='1005589876' data-concl='02/06/2026' data-txtcode='Suspens Falta Pgto Dunning – PROPRIO' data-local='NISIA FLORESTA' data-bairro='ALCACUZ' data-rua='RUA GOLANDI 31' data-dtpedido='CSR_OPT_100-@SOLO@-@' data-medidor='2241070584' data-valor='442' data-prioridade='PRIO-03'></tr>
+<tr data-equipe='STCPNA0004' data-tensao='11' data-nota='1005592746' data-concl='02/06/2026' data-txtcode='Suspens Falta Pgto Dunning – PROPRIO' data-local='NISIA FLORESTA' data-bairro='BUZIOS' data-rua='PR DE BUZIOS 999' data-dtpedido='CSR_OPT_100-@SOLO@-@' data-medidor='2241072790' data-valor='580' data-prioridade='PRIO-02'></tr>
+<tr data-equipe='STCPNA0004' data-tensao='11' data-nota='1005594608' data-concl='02/06/2026' data-txtcode='Suspens Falta Pgto Dunning – PROPRIO' data-local='NISIA FLORESTA' data-bairro='BUZIOS' data-rua='RUA POR DO SOL 6' data-dtpedido='CSR_OPT_100-@SOLO@-@' data-medidor='2190093886' data-valor='282' data-prioridade='PRIO-03'></tr>
+<tr data-equipe='STCPNA0004' data-tensao='11' data-nota='1005590902' data-concl='02/06/2026' data-txtcode='Suspens Falta Pgto Dunning – PROPRIO' data-local='PARNAMIRIM' data-bairro='EMAUS' data-rua='RUA RIO JUNDIAI 73, -LD' data-dtpedido='CSR_OPT_100-@SOLO@-@' data-medidor='2230032176' data-valor='297' data-prioridade='PRIO-03'></tr>
+<tr data-equipe='STCPNA0004' data-tensao='11' data-nota='1005591359' data-concl='02/06/2026' data-txtcode='Suspens Falta Pgto Dunning – PROPRIO' data-local='PARNAMIRIM' data-bairro='EMAUS' data-rua='ET PARA CATRE 77' data-dtpedido='CSR_OPT_100-@SOLO@-@' data-medidor='2240226769' data-valor='1003' data-prioridade='PRIO-01'></tr>
+<tr data-equipe='STCPNA0004' data-tensao='11' data-nota='1005593748' data-concl='02/06/2026' data-txtcode='Suspens Falta Pgto Dunning – PROPRIO' data-local='PARNAMIRIM' data-bairro='EMAUS' data-rua='ET PARA CATRE 77' data-dtpedido='CSR_OPT_100-@SOLO@-@' data-medidor='2180048629' data-valor='320' data-prioridade='PRIO-03'></tr>
+<tr data-equipe='STCPNA0005' data-tensao='11' data-nota='1005593661' data-concl='02/06/2026' data-txtcode='Suspens Falta Pgto Dunning – PROPRIO' data-local='SAO JOSE DE MIPIBU' data-bairro='TABORDA' data-rua='RUA MIRANDOLINA TEIXEIRA DE ANDRADE 160' data-dtpedido='CSR_OPT_100-@SOLO@-@' data-medidor='2210429444' data-valor='980' data-prioridade='PRIO-02'></tr>
+<tr data-equipe='STCPNA0005' data-tensao='11' data-nota='1005591746' data-concl='02/06/2026' data-txtcode='Suspens Falta Pgto Dunning – PROPRIO' data-local='PARNAMIRIM' data-bairro='CENTRO' data-rua='RUA TENENTE BULHOES 29, -LD' data-dtpedido='CSR_OPT_100-@SOLO@-@' data-medidor='2200902877' data-valor='1171' data-prioridade='PRIO-01'></tr>
+<tr data-equipe='STCPNA0005' data-tensao='11' data-nota='1005595083' data-concl='02/06/2026' data-txtcode='Suspens Falta Pgto Dunning – PROPRIO' data-local='SAO JOSE DE MIPIBU' data-bairro='TABORDA' data-rua='RUA LUIS DE CAMOES 90' data-dtpedido='CSR_OPT_100-@SOLO@-@' data-medidor='2241998080' data-valor='389' data-prioridade='PRIO-03'></tr>
+<tr data-equipe='STCPNA0005' data-tensao='11' data-nota='1005592727' data-concl='02/06/2026' data-txtcode='Suspens Falta Pgto Dunning – PROPRIO' data-local='MACAIBA' data-bairro='CENTRO' data-rua='RUA FRANCISCO EDUARDO DA SILVA 26, --A 1' data-dtpedido='CSR_OPT_100-@SOLO@-@' data-medidor='2140313605' data-valor='270' data-prioridade='PRIO-03'></tr>
+<tr data-equipe='STCPNA0005' data-tensao='11' data-nota='1005592658' data-concl='02/06/2026' data-txtcode='Suspens Falta Pgto Dunning – PROPRIO' data-local='NISIA FLORESTA' data-bairro='ALCACUZ' data-rua='RUA GOLANDI 03' data-dtpedido='CSR_OPT_100-@POST@-@' data-medidor='2230989241' data-valor='297' data-prioridade='PRIO-03'></tr>
+<tr data-equipe='STCPNA0005' data-tensao='11' data-nota='1005595087' data-concl='02/06/2026' data-txtcode='Suspens Falta Pgto Dunning – PROPRIO' data-local='SAO JOSE DE MIPIBU' data-bairro='TABORDA' data-rua='RUA NELSON RODRIGUES 523, --A' data-dtpedido='CSR_OPT_100-@SOLO@-@' data-medidor='2140496394' data-valor='580' data-prioridade='PRIO-02'></tr>
+<tr data-equipe='STCPNA0005' data-tensao='11' data-nota='1005589881' data-concl='02/06/2026' data-txtcode='Suspens Falta Pgto Dunning – PROPRIO' data-local='SAO JOSE DE MIPIBU' data-bairro='TABORDA' data-rua='RUA PADRE ANTONIO VIEIRA 270' data-dtpedido='CSR_OPT_100-@SOLO@-@' data-medidor='2140548580' data-valor='1800' data-prioridade='PRIO-01'></tr>
+<tr data-equipe='STCPNA0005' data-tensao='31' data-nota='1005591313' data-concl='02/06/2026' data-txtcode='Suspens Falta Pgto Dunning – PROPRIO' data-local='PARNAMIRIM' data-bairro='NOVA ESPERANCA' data-rua='RUA ROSA FERNANDES DA SILVA 355' data-dtpedido='CSR_OPT_100-@POST@-@' data-medidor='2201151697' data-valor='1723' data-prioridade='PRIO-01'></tr>
+<tr data-equipe='STCPNA0005' data-tensao='31' data-nota='1005590834' data-concl='02/06/2026' data-txtcode='Suspens Falta Pgto Dunning – PROPRIO' data-local='PARNAMIRIM' data-bairro='EMAUS' data-rua='RUA SANTA GEMA 389' data-dtpedido='CSR_OPT_100-@POST@-@' data-medidor='2120441160' data-valor='1215' data-prioridade='PRIO-01'></tr>
+<tr data-equipe='STCPNA0005' data-tensao='11' data-nota='1005590906' data-concl='02/06/2026' data-txtcode='Suspens Falta Pgto Dunning – PROPRIO' data-local='MACAIBA' data-bairro='CENTRO' data-rua='RUA FRANCISCO LEVINO DA SILVA 289' data-dtpedido='CSR_OPT_100-@SOLO@-@' data-medidor='2240532827' data-valor='298' data-prioridade='PRIO-03'></tr>
+<tr data-equipe='STCPNA0005' data-tensao='11' data-nota='1005594262' data-concl='02/06/2026' data-txtcode='Suspens Falta Pgto Dunning – PROPRIO' data-local='PARNAMIRIM' data-bairro='VIDA NOVA' data-rua='RUA MAR DA GALILEIA 1105' data-dtpedido='CSR_OPT_100-@SOLO@-@' data-medidor='2140479473' data-valor='391' data-prioridade='PRIO-03'></tr>
+<tr data-equipe='STCPNA0005' data-tensao='11' data-nota='1005595093' data-concl='02/06/2026' data-txtcode='Suspens Falta Pgto Dunning – PROPRIO' data-local='PARNAMIRIM' data-bairro='ROSA DOS VENTOS' data-rua='RUA FRANCISCO FERREIRA DA SILVA 707' data-dtpedido='CSR_OPT_100-@SOLO@-@' data-medidor='2222582965' data-valor='1754' data-prioridade='PRIO-01'></tr>
+<tr data-equipe='STCPNA0005' data-tensao='11' data-nota='1005592749' data-concl='02/06/2026' data-txtcode='Suspens Falta Pgto Dunning – PROPRIO' data-local='MACAIBA' data-bairro='BELA VISTA' data-rua='RUA JOSE HONORATO DE MOURA 443' data-dtpedido='CSR_OPT_100-@SOLO@-@' data-medidor='2140854169' data-valor='1916' data-prioridade='PRIO-01'></tr>
+<tr data-equipe='STCPNA0005' data-tensao='31' data-nota='1005591305' data-concl='02/06/2026' data-txtcode='Suspens Falta Pgto Dunning – PROPRIO' data-local='NISIA FLORESTA' data-bairro='PIRANGI DO SUL' data-rua='RUA DO CAMPO 1' data-dtpedido='CSR_OPT_100-@POST@-@' data-medidor='2210921233' data-valor='570' data-prioridade='PRIO-02'></tr>
+<tr data-equipe='STCPNA0005' data-tensao='11' data-nota='1005595154' data-concl='02/06/2026' data-txtcode='Suspens Falta Pgto Dunning – PROPRIO' data-local='SAO JOSE DE MIPIBU' data-bairro='TABORDA' data-rua='PO TABORDA 85' data-dtpedido='CSR_OPT_100-@SOLO@-@' data-medidor='2130678958' data-valor='339' data-prioridade='PRIO-03'></tr>
+<tr data-equipe='STCPNA0005' data-tensao='11' data-nota='1005594217' data-concl='02/06/2026' data-txtcode='Suspens Falta Pgto Dunning – PROPRIO' data-local='NISIA FLORESTA' data-bairro='PIRANGI DO SUL' data-rua='AV BEIRA MAR 3' data-dtpedido='CSR_OPT_100-@SOLO@-@' data-medidor='2201340244' data-valor='505' data-prioridade='PRIO-02'></tr>
+<tr data-equipe='STCPNA0005' data-tensao='11' data-nota='1005594646' data-concl='02/06/2026' data-txtcode='Suspens Falta Pgto Dunning – PROPRIO' data-local='PARNAMIRIM' data-bairro='SANTA TEREZA' data-rua='RUA PRESIDENTE JOAO GOULART 27, --A FT' data-dtpedido='CSR_OPT_100-@SOLO@-@' data-medidor='2190357735' data-valor='270' data-prioridade='PRIO-03'></tr>
+<tr data-equipe='STCPNA0005' data-tensao='11' data-nota='1005589899' data-concl='02/06/2026' data-txtcode='Suspens Falta Pgto Dunning – PROPRIO' data-local='SAO JOSE DE MIPIBU' data-bairro='MENDES' data-rua='AV DOS CANAVIAIS 200' data-dtpedido='CSR_OPT_100-@SOLO@-@' data-medidor='2160051887' data-valor='346' data-prioridade='PRIO-03'></tr>
+<tr data-equipe='STCPNA0005' data-tensao='11' data-nota='1005595178' data-concl='02/06/2026' data-txtcode='Suspens Falta Pgto Dunning – PROPRIO' data-local='SAO JOSE DE MIPIBU' data-bairro='TABORDA' data-rua='RUA SUIRIRI 175' data-dtpedido='CSR_OPT_100-@SOLO@-@' data-medidor='2240205710' data-valor='596' data-prioridade='PRIO-02'></tr>
+<tr data-equipe='STCPNA0005' data-tensao='11' data-nota='1005590851' data-concl='02/06/2026' data-txtcode='Suspens Falta Pgto Dunning – PROPRIO' data-local='PARNAMIRIM' data-bairro='SANTOS REIS' data-rua='RUA DOROTHY DE MOURA LIMA 88, -LD' data-dtpedido='CSR_OPT_100-@SOLO@-@' data-medidor='2242137828' data-valor='572' data-prioridade='PRIO-02'></tr>
+<tr data-equipe='STCPNA0006' data-tensao='11' data-nota='1005592695' data-concl='02/06/2026' data-txtcode='Suspens Falta Pgto Dunning – PROPRIO' data-local='NISIA FLORESTA' data-bairro='ALCACUZ' data-rua='AV PRESIDENTE CAFE FILHO 90, --A' data-dtpedido='CSR_OPT_100-@SOLO@-@' data-medidor='2200238845' data-valor='847' data-prioridade='PRIO-02'></tr>
+<tr data-equipe='STCPNA0006' data-tensao='11' data-nota='1005589918' data-concl='02/06/2026' data-txtcode='Suspens Falta Pgto Dunning – PROPRIO' data-local='SAO JOSE DE MIPIBU' data-bairro='TABORDA' data-rua='RUA GONCALVES DIAS 59' data-dtpedido='CSR_OPT_100-@SOLO@-@' data-medidor='5260480067' data-valor='522' data-prioridade='PRIO-02'></tr>
+<tr data-equipe='STCPNA0006' data-tensao='31' data-nota='1005590833' data-concl='02/06/2026' data-txtcode='Suspens Falta Pgto Dunning – PROPRIO' data-local='MACAIBA' data-bairro='ZONA RURAL' data-rua='PO PE DO GALO 18' data-dtpedido='CSR_OPT_100-@POST@-@' data-medidor='2190665405' data-valor='564' data-prioridade='PRIO-02'></tr>
+<tr data-equipe='STCPNA0006' data-tensao='11' data-nota='1005591819' data-concl='02/06/2026' data-txtcode='Suspens Falta Pgto Dunning – PROPRIO' data-local='PARNAMIRIM' data-bairro='BELA PARNAMIRIM' data-rua='RUA MARIA AUGUSTA 76, --B' data-dtpedido='CSR_OPT_100-@SOLO@-@' data-medidor='2213048700' data-valor='275' data-prioridade='PRIO-03'></tr>
+<tr data-equipe='STCPNA0006' data-tensao='31' data-nota='1005595134' data-concl='02/06/2026' data-txtcode='Suspens Falta Pgto Dunning – PROPRIO' data-local='NISIA FLORESTA' data-bairro='PRIMAVERA' data-rua='RUA SAO PAULO 14' data-dtpedido='CSR_OPT_100-@POST@-@' data-medidor='2210958471' data-valor='1828' data-prioridade='PRIO-01'></tr>
+<tr data-equipe='STCPNA0006' data-tensao='11' data-nota='1005593182' data-concl='02/06/2026' data-txtcode='Suspens Falta Pgto Dunning – PROPRIO' data-local='SAO JOSE DE MIPIBU' data-bairro='TABORDA' data-rua='PO TABORDA 78' data-dtpedido='CSR_OPT_100-@POST@-@' data-medidor='2211302731' data-valor='443' data-prioridade='PRIO-03'></tr>
+<tr data-equipe='STCPNA0006' data-tensao='11' data-nota='1005591750' data-concl='02/06/2026' data-txtcode='Suspens Falta Pgto Dunning – PROPRIO' data-local='SAO JOSE DE MIPIBU' data-bairro='TABORDA' data-rua='RUA DOS IPES 54' data-dtpedido='CSR_OPT_100-@POST@-@' data-medidor='2210996268' data-valor='601' data-prioridade='PRIO-02'></tr>
+<tr data-equipe='STCPNA0006' data-tensao='11' data-nota='1005594662' data-concl='02/06/2026' data-txtcode='Suspens Falta Pgto Dunning – PROPRIO' data-local='SAO JOSE DE MIPIBU' data-bairro='TABORDA' data-rua='PO TABORDA 350, --A' data-dtpedido='CSR_OPT_100-@SOLO@-@' data-medidor='2212882421' data-valor='498' data-prioridade='PRIO-03'></tr>
+<tr data-equipe='STCPNA0006' data-tensao='11' data-nota='1005594184' data-concl='02/06/2026' data-txtcode='Suspens Falta Pgto Dunning – PROPRIO' data-local='SAO JOSE DE MIPIBU' data-bairro='TABORDA II' data-rua='RUA SANTA JOANNA DE ANGELIS 135, --A' data-dtpedido='CSR_OPT_100-@SOLO@-@' data-medidor='2190596152' data-valor='389' data-prioridade='PRIO-03'></tr>
+<tr data-equipe='STCPNA0006' data-tensao='11' data-nota='1005593701' data-concl='02/06/2026' data-txtcode='Suspens Falta Pgto Dunning – PROPRIO' data-local='NISIA FLORESTA' data-bairro='BUZIOS' data-rua='RUA MINISTRO FRANCISCO FAUSTO 55, -FD' data-dtpedido='CSR_OPT_100-@SOLO@-@' data-medidor='2221787296' data-valor='777' data-prioridade='PRIO-02'></tr>
+<tr data-equipe='STCPNA0006' data-tensao='11' data-nota='1005590910' data-concl='02/06/2026' data-txtcode='Suspens Falta Pgto Dunning – PROPRIO' data-local='MACAIBA' data-bairro='TAVARES DE LIRA' data-rua='AV JUNDIAI 320' data-dtpedido='CSR_OPT_100-@SOLO@-@' data-medidor='2242598868' data-valor='279' data-prioridade='PRIO-03'></tr>
+<tr data-equipe='STCPNA0006' data-tensao='31' data-nota='1005592724' data-concl='02/06/2026' data-txtcode='Suspens Falta Pgto Dunning – PROPRIO' data-local='SAO JOSE DE MIPIBU' data-bairro='PASSAGEM DOS CAVALOS' data-rua='RUA PROFESSORA ISAURA ARCOVERDE 100' data-dtpedido='CSR_OPT_100-@POST@-@' data-medidor='2230689906' data-valor='420' data-prioridade='PRIO-03'></tr>
+<tr data-equipe='STCPNA0006' data-tensao='31' data-nota='1005593215' data-concl='02/06/2026' data-txtcode='Suspens Falta Pgto Dunning – PROPRIO' data-local='NISIA FLORESTA' data-bairro='COLONIA DO PIUM' data-rua='LO AGUAS CRISTALINAS 108' data-dtpedido='CSR_OPT_100-@POST@-@' data-medidor='2240014150' data-valor='1882' data-prioridade='PRIO-01'></tr>
+<tr data-equipe='STCPNA0006' data-tensao='11' data-nota='1005591336' data-concl='02/06/2026' data-txtcode='Suspens Falta Pgto Dunning – PROPRIO' data-local='PARNAMIRIM' data-bairro='MONTE CASTELO' data-rua='RUA DAS VITORIAS 305' data-dtpedido='CSR_OPT_100-@SOLO@-@' data-medidor='2240835633' data-valor='288' data-prioridade='PRIO-03'></tr>
+<tr data-equipe='STCPNA0006' data-tensao='11' data-nota='1005591781' data-concl='02/06/2026' data-txtcode='Suspens Falta Pgto Dunning – PROPRIO' data-local='SAO JOSE DE MIPIBU' data-bairro='MENDES' data-rua='RUA GRANJA DO TORTO 115' data-dtpedido='CSR_OPT_100-@SOLO@-@' data-medidor='2222840905' data-valor='346' data-prioridade='PRIO-03'></tr>
+<tr data-equipe='STCPNA0006' data-tensao='11' data-nota='1005591342' data-concl='02/06/2026' data-txtcode='Suspens Falta Pgto Dunning – PROPRIO' data-local='MACAIBA' data-bairro='CAMPO DA SANTA CRUZ' data-rua='TV LUIZ DA SILVA 41' data-dtpedido='CSR_OPT_100-@SOLO@-@' data-medidor='2241129120' data-valor='277' data-prioridade='PRIO-03'></tr>
+<tr data-equipe='STCPNA0006' data-tensao='11' data-nota='1005595467' data-concl='02/06/2026' data-txtcode='Suspens Falta Pgto Dunning – PROPRIO' data-local='PARNAMIRIM' data-bairro='BOA ESPERANCA' data-rua='AV DOUTOR LUIS ANTONIO 504, --A' data-dtpedido='CSR_OPT_100-@SOLO@-@' data-medidor='2240976512' data-valor='805' data-prioridade='PRIO-02'></tr>
+<tr data-equipe='STCPNA0006' data-tensao='11' data-nota='1005591338' data-concl='02/06/2026' data-txtcode='Suspens Falta Pgto Dunning – PROPRIO' data-local='MACAIBA' data-bairro='CENTRO' data-rua='VI SAO JOSE 45, --C' data-dtpedido='CSR_OPT_100-@SOLO@-@' data-medidor='2240241474' data-valor='292' data-prioridade='PRIO-03'></tr>
+<tr data-equipe='STCPNA0006' data-tensao='11' data-nota='1005593755' data-concl='02/06/2026' data-txtcode='Suspens Falta Pgto Dunning – PROPRIO' data-local='NISIA FLORESTA' data-bairro='PIUM' data-rua='RUA PORTAL DE ARITUBA 13' data-dtpedido='CSR_OPT_100-@SOLO@-@' data-medidor='2240608726' data-valor='1715' data-prioridade='PRIO-01'></tr>
+<tr data-equipe='STCPNA0006' data-tensao='11' data-nota='1005591341' data-concl='02/06/2026' data-txtcode='Suspens Falta Pgto Dunning – PROPRIO' data-local='SAO JOSE DE MIPIBU' data-bairro='TABORDA' data-rua='RUA PADRE ANTONIO VIEIRA 201, --B' data-dtpedido='CSR_OPT_100-@SOLO@-@' data-medidor='2241233009' data-valor='719' data-prioridade='PRIO-02'></tr>
+<tr data-equipe='STCPNA0007' data-tensao='11' data-nota='1005595455' data-concl='02/06/2026' data-txtcode='Suspens Falta Pgto Dunning – PROPRIO' data-local='SAO JOSE DE MIPIBU' data-bairro='TABORDA' data-rua='RUA CORA CORALINA 65' data-dtpedido='CSR_OPT_100-@SOLO@-@' data-medidor='2161215450' data-valor='835' data-prioridade='PRIO-02'></tr>
+<tr data-equipe='STCPNA0007' data-tensao='11' data-nota='1005590396' data-concl='02/06/2026' data-txtcode='Suspens Falta Pgto Dunning – PROPRIO' data-local='SAO JOSE DE MIPIBU' data-bairro='TABORDA' data-rua='RUA JOAO CABRAL DE MELO NETO 285' data-dtpedido='CSR_OPT_100-@SOLO@-@' data-medidor='2160959005' data-valor='954' data-prioridade='PRIO-02'></tr>
+<tr data-equipe='STCPNA0007' data-tensao='31' data-nota='1005593249' data-concl='02/06/2026' data-txtcode='Suspens Falta Pgto Dunning – PROPRIO' data-local='PARNAMIRIM' data-bairro='SANTOS REIS' data-rua='AV PRESIDENTE GETULIO VARGAS 6, --B' data-dtpedido='CSR_OPT_100-@POST@-@' data-medidor='2241798898' data-valor='367' data-prioridade='PRIO-03'></tr>
+<tr data-equipe='STCPNA0007' data-tensao='11' data-nota='1005594228' data-concl='02/06/2026' data-txtcode='Suspens Falta Pgto Dunning – PROPRIO' data-local='NISIA FLORESTA' data-bairro='LAGOA SECA' data-rua='PO LAGOA SECA 8, --A' data-dtpedido='CSR_OPT_100-@SOLO@-@' data-medidor='2240515388' data-valor='1949' data-prioridade='PRIO-01'></tr>
+<tr data-equipe='STCPNA0007' data-tensao='11' data-nota='1005592304' data-concl='02/06/2026' data-txtcode='Suspens Falta Pgto Dunning – PROPRIO' data-local='PARNAMIRIM' data-bairro='EMAUS' data-rua='RUA JOSE FERREIRA DE LIMA 231, -FT' data-dtpedido='CSR_OPT_100-@SOLO@-@' data-medidor='2230607926' data-valor='298' data-prioridade='PRIO-03'></tr>
+<tr data-equipe='STCPNA0007' data-tensao='11' data-nota='1005594167' data-concl='02/06/2026' data-txtcode='Suspens Falta Pgto Dunning – PROPRIO' data-local='PARNAMIRIM' data-bairro='SANTOS REIS' data-rua='RUA RIO GRANDE DO NORTE 176, --A' data-dtpedido='CSR_OPT_100-@SOLO@-@' data-medidor='2161187022' data-valor='322' data-prioridade='PRIO-03'></tr>
+
+</tbody></table></div>
+<script>
+function clsPrioridade(v){
+  var t=(v||'').trim().toUpperCase();
+  if(t==='PRIO-01') return 'prio-01';
+  if(t==='PRIO-02') return 'prio-02';
+  if(t==='PRIO-03') return 'prio-03';
+  return '';
+}
+function formatMoneyBR(v){
+  var txt=(v||'').toString().trim();
+  if(!txt) return '—';
+  txt=txt.replace(/R\$/g,'').replace(/\s+/g,'');
+  if(txt.indexOf(',')>-1){
+    txt=txt.replace(/\./g,'').replace(',','.');
+  }
+  var num=Number(txt);
+  if(isNaN(num)) return v;
+  return num.toLocaleString('pt-BR',{style:'currency',currency:'BRL'});
+}
+function buildCards(){
+  var rows=document.querySelectorAll('#tblNotas tbody tr');
+  var cards=document.getElementById('cards');
+  var filtroPrioridade=document.getElementById('filtroPrioridade');
+  var filtroEquipe=document.getElementById('filtroEquipe');
+  var search=document.getElementById('qSearch');
+  var data=[];
+  rows.forEach(function(tr){
+    var d=tr.dataset;
+    data.push({
+      equipe:d.equipe||'',
+      tensao:d.tensao||'',
+      nota:d.nota||'',
+      concl:d.concl||'',
+      txtcode:d.txtcode||'',
+      local:d.local||'',
+      bairro:d.bairro||'',
+      rua:d.rua||'',
+      dtpedido:d.dtpedido||'',
+      medidor:d.medidor||'',
+      valor:d.valor||'',
+      prioridade:d.prioridade||''
+    });
+  });
+  var prios=Array.from(new Set(data.map(function(x){return x.prioridade;}))).filter(function(x){return x&&x.trim()!==''}).sort();
+  prios.forEach(function(p){
+    var o=document.createElement('option');
+    o.value=p; o.textContent=p; filtroPrioridade.appendChild(o);
+  });
+  var equipes=Array.from(new Set(data.map(function(x){return x.equipe;}))).filter(function(x){return x&&x.trim()!==''}).sort();
+  equipes.forEach(function(e){
+    var o=document.createElement('option');
+    o.value=e; o.textContent=e; filtroEquipe.appendChild(o);
+  });
+  function render(){
+    cards.innerHTML='';
+    var q=(search.value||'').toLowerCase();
+    var selPrio=filtroPrioridade.value;
+    var selEquipe=filtroEquipe.value;
+    data.forEach(function(it){
+      if(selPrio && it.prioridade !== selPrio) return;
+      if(selEquipe && it.equipe !== selEquipe) return;
+      var hay=(it.equipe+' '+it.nota+' '+it.local+' '+it.bairro+' '+it.rua+' '+it.medidor+' '+it.prioridade+' '+it.txtcode+' '+it.tensao).toLowerCase();
+      if(q && hay.indexOf(q)===-1) return;
+      var cls=clsPrioridade(it.prioridade);
+      var card=document.createElement('div'); card.className='card '+cls;
+      var topo=document.createElement('div'); topo.className='topline';
+      var esquerda=document.createElement('div');
+      esquerda.innerHTML='<div class="nota">'+(it.nota||'—')+'</div><div class="sub">Equipe: '+(it.equipe||'—')+' | Tensão: '+(it.tensao||'—')+'</div>'; 
+      var badge=document.createElement('div');
+      badge.className='pill priority '+cls;
+      badge.textContent=it.prioridade||'Sem prioridade';
+      topo.appendChild(esquerda);
+      topo.appendChild(badge);
+      var addr=document.createElement('div'); addr.className='addr';
+      addr.innerHTML='<strong>'+(it.local||'')+'</strong>' + ((it.bairro||'') ? ' • ' + it.bairro : '') + '<br>' + (it.rua||'');
+      var fields=document.createElement('div'); fields.className='fields';
+      function addPill(txt){
+        if(!txt || String(txt).trim()==='') return;
+        var p=document.createElement('div');
+        p.className='pill';
+        p.textContent=txt;
+        fields.appendChild(p);
+      }
+      addPill('Concl. desejada: ' + (it.concl||'—'));
+      addPill('DT PEDIDO: ' + (it.dtpedido||'—'));
+      addPill('Medidor: ' + (it.medidor||'—'));
+      addPill('Txt.code codif: ' + (it.txtcode||'—'));
+      addPill('Valor da Dívida: ' + formatMoneyBR(it.valor));
+      card.appendChild(topo);
+      card.appendChild(addr);
+      card.appendChild(fields);
+      cards.appendChild(card);
+    });
+    document.getElementById('contadorTotal').textContent='Total: '+document.querySelectorAll('#cards .card').length;
+    document.getElementById('empty').style.display=document.querySelectorAll('#cards .card').length ? 'none' : 'block';
+  }
+  filtroPrioridade.addEventListener('change', render);
+  filtroEquipe.addEventListener('change', render);
+  search.addEventListener('input', render);
+  render();
+}
+document.addEventListener('DOMContentLoaded', buildCards);
+</script>
+</div>
+</body>
+</html>
